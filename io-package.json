@@ -1,0 +1,95 @@
+{
+    "common": {
+        "name": "kostal-piko-mp-plus",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Kostal PIKO MP plus",
+        "titleLang": {
+            "en": "Kostal PIKO MP plus",
+            "de": "Kostal PIKO MP plus",
+            "ru": "Косталь ПИКО МП плюс",
+            "pt": "Kostal PIKO MP plus",
+            "nl": "Kostal PIKO MP plus",
+            "fr": "Kostal PIKO MP plus",
+            "it": "Kostal PIKO MP plus",
+            "es": "Kostal PIKO MP más",
+            "pl": "Kostal PIKO MP plus",
+            "zh-cn": "Kostal PIKO MP plus"
+        },
+        "desc": {
+            "en": "Integrate your Kostal PIKO MP plus into ioBroker",
+            "de": "Integrieren Sie Ihren Kostal PIKO MP plus in ioBroker",
+            "ru": "Интегрируйте свой Kostal PIKO MP plus в ioBroker",
+            "pt": "Integre seu Kostal PIKO MP plus no ioBroker",
+            "nl": "Integreer uw Kostal PIKO MP plus in ioBroker",
+            "fr": "Intégrez votre Kostal PIKO MP plus dans ioBroker",
+            "it": "Integra il tuo Kostal PIKO MP plus in ioBroker",
+            "es": "Integre su Kostal PIKO MP plus en ioBroker",
+            "pl": "Zintegruj Kostal PIKO MP plus z ioBroker",
+            "zh-cn": "将您的 Kostal PIKO MP plus 集成到 ioBroker"
+        },
+        "authors": ["Doggi <soeren.grzanna@googlemail.com>"],
+        "keywords": ["kostal", "piko", "mp", "plus", "iobroker", "pv"],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "kostal-piko-mp-plus.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/Doggi/ioBroker.kostal-piko-mp-plus/master/admin/kostal-piko-mp-plus.png",
+        "readme": "https://github.com/Doggi/ioBroker.kostal-piko-mp-plus/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "energy",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "eraseOnUpload": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
