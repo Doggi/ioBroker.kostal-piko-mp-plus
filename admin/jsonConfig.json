@@ -1,0 +1,30 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "_options": {
+            "type": "panel",
+            "label": "Options",
+            "items": {
+                "serverIp": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 6,
+                    "label": "Server IP/Hostname",
+                    "help": "IP or hostname of your Kostal PIKO MP plus"
+                },
+                "interval": {
+                    "type": "number",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 6,
+                    "min": 100,
+                    "max": 600000,
+                    "label": "Interval (ms)",
+                    "help": "Refresh interval in milliseconds"
+                }
+            }
+        }
+    }
+}

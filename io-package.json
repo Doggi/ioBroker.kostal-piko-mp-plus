@@ -58,15 +58,23 @@
         "dataSource": "poll",
         "materialize": true,
         "eraseOnUpload": true,
+        "adminUI": {
+            "config": "json"
+        },
         "dependencies": [
             {
                 "js-controller": ">=2.0.0"
             }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=5.1.28"
+            }
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "serverIp": "",
+        "interval": 10000
     },
     "objects": [],
     "instanceObjects": [

@@ -1,0 +1,7 @@
+{
+    "Options": "Choix",
+    "Server IP/Hostname": "IP/nom d'hôte du serveur",
+    "IP or hostname of your Kostal PIKO MP plus": "IP ou nom d'hôte de votre Kostal PIKO MP plus",
+    "Interval (ms)": "Intervalle (ms)",
+    "Refresh interval in milliseconds": "Intervalle de rafraîchissement en millisecondes"
+}
