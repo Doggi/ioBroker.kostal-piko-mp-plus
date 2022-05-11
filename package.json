@@ -90,7 +90,7 @@
     "test": "npm run test:ts && npm run test:package",
     "check": "tsc --noEmit",
     "coverage": "nyc npm run test:ts",
-    "lint": "eslint --ext .ts,.tsx src/ admin/src/",
+    "lint": "eslint --ext .ts,.tsx src/",
     "translate": "translate-adapter",
     "release": "release-script"
   },
