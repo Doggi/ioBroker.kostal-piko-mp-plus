@@ -21,7 +21,7 @@ class KostalPikoMpPlus extends utils.Adapter {
             name: "kostal-piko-mp-plus",
         });
         this.on("ready", this.onReady.bind(this));
-        this.on("stateChange", this.onStateChange.bind(this));
+        // this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
         // this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
@@ -192,6 +192,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     /**
      * Is called if a subscribed state changes
      */
+    /*
     private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
         if (state) {
             // The state was changed
@@ -201,7 +202,7 @@ class KostalPikoMpPlus extends utils.Adapter {
             this.log.info(`state ${id} deleted`);
         }
     }
-
+    */
     // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
     // /**
     //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
