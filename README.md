@@ -68,6 +68,8 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) Admin 4 UI with no support
+-   (Doggi) emove admin code. because we use jsonConfig.js
 -   (Doggi) move gimp file to admin folder
 -   (Doggi) changed email
 -   (Doggi) remove "Test the adapter manually with dev-server"
