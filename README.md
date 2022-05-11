@@ -106,6 +106,15 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) define default values for options
+-   (Doggi) add gimp logo file
+-   (Doggi) change logo
+-   (Doggi) add test/, src/, tsconfig.json, tsconfig.build.json, to .npmignore
+-   (Doggi) add .npmignore
+-   (Doggi) add options and translation
+-   (dependabot[bot]) Bump @types/react-dom from 17.0.16 to 18.0.3
+-   (Doggi) change repository url to https
+-   (Doggi) remove get started from readme
 -   (Doggi) initial release
 
 ## License
