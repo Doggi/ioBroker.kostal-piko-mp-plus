@@ -42,7 +42,6 @@ class KostalPikoMpPlus extends utils.Adapter {
     }));
     this.refreshInterval = void 0;
     this.on("ready", this.onReady.bind(this));
-    this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
@@ -119,13 +118,6 @@ class KostalPikoMpPlus extends utils.Adapter {
       callback();
     } catch (e) {
       callback();
-    }
-  }
-  onStateChange(id, state) {
-    if (state) {
-      this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-    } else {
-      this.log.info(`state ${id} deleted`);
     }
   }
 }
