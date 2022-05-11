@@ -54,6 +54,7 @@ class KostalPikoMpPlus extends utils.Adapter {
                 await this.updateStates(dom, states);
             } catch (error) {
                 this.setState("info.connection", false, true);
+                this.clearInterval(this.refreshInterval);
                 if (axios.isAxiosError(error)) {
                     this.log.error(`error message: ${error.message}`);
                 } else {

@@ -50,7 +50,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     this.setState("info.connection", false, true);
     this.log.debug("config.serverIp: " + this.config.serverIp);
     this.log.debug("config.interval: " + this.config.interval);
-    const requestURL = `http://${this.config.serverIp}/measurements.xml`;
+    const requestURL = `${this.config.serverIp}/measurements.xml`;
     const requestHeader = { headers: { Accept: "application/xml" } };
     this.refreshInterval = this.setInterval(async () => {
       try {
@@ -61,6 +61,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         await this.updateStates(dom, states);
       } catch (error) {
         this.setState("info.connection", false, true);
+        this.clearInterval(this.refreshInterval);
         if (import_axios.default.isAxiosError(error)) {
           this.log.error(`error message: ${error.message}`);
         } else {
