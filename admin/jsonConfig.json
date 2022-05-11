@@ -19,8 +19,8 @@
                     "sm": 12,
                     "md": 6,
                     "lg": 6,
-                    "min": 100,
-                    "max": 600000,
+                    "min": 10000,
+                    "max": 3600000,
                     "label": "Interval (ms)",
                     "help": "Refresh interval in milliseconds"
                 }

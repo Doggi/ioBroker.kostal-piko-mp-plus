@@ -73,8 +73,8 @@
         ]
     },
     "native": {
-        "serverIp": "",
-        "interval": 10000
+        "serverIp": "<ip>:<port>",
+        "interval": 300000
     },
     "objects": [],
     "instanceObjects": [
@@ -90,12 +90,25 @@
             "_id": "info.connection",
             "type": "state",
             "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
+                "name": "connection",
                 "type": "boolean",
                 "read": true,
-                "write": false,
-                "def": false
+                "write": false
+            }
+        },
+        {
+            "_id": "device",
+            "type": "channel",
+            "common": {
+                "name": "Device Informations"
+            },
+            "native": {}
+        },
+        {
+            "_id": "measurements",
+            "type": "channel",
+            "common": {
+                "name": "Measurements"
             },
             "native": {}
         }
