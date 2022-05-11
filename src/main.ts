@@ -5,11 +5,16 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-
 // Load your modules here, e.g.:
-// import * as fs from "fs";
+import axios from "axios";
+import { DOMParser } from "xmldom";
+import xpath from "xpath";
+import { State } from "./lib/State";
+import { StatesMapper } from "./StatesMapper";
 
 class KostalPikoMpPlus extends utils.Adapter {
+    refreshInterval: any = undefined;
+
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
             ...options,
@@ -27,20 +32,42 @@ class KostalPikoMpPlus extends utils.Adapter {
      */
     private async onReady(): Promise<void> {
         // Initialize your adapter here
-
+        const states = StatesMapper.states;
         // Reset the connection indicator during startup
         this.setState("info.connection", false, true);
 
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
-        this.log.info("config: " + this.config.serverIp);
-        this.log.info("config: " + this.config.interval);
+        // The adapters config (in the instance object everything under the attribute "native") is accessible via this.config:
+        this.log.debug("config.serverIp: " + this.config.serverIp);
+        this.log.debug("config.interval: " + this.config.interval);
+
+        const requestURL = `http://${this.config.serverIp}/measurements.xml`;
+        const requestHeader = { headers: { Accept: "application/xml" } };
+
+        this.refreshInterval = this.setInterval(async () => {
+            try {
+                const { data, status } = await axios.get<string>(requestURL, requestHeader);
+
+                this.setState("info.connection", true, true);
+
+                this.log.debug(`request to ${requestURL} with status ${status}`);
+                const dom = new DOMParser().parseFromString(data);
+                await this.updateStates(dom, states);
+            } catch (error) {
+                this.setState("info.connection", false, true);
+                if (axios.isAxiosError(error)) {
+                    this.log.error(`error message: ${error.message}`);
+                } else {
+                    this.log.error(`unexpected error: ${error}`);
+                }
+            }
+        }, this.config.interval);
 
         /*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
 		*/
+        /*
         await this.setObjectNotExistsAsync("testVariable", {
             type: "state",
             common: {
@@ -52,9 +79,9 @@ class KostalPikoMpPlus extends utils.Adapter {
             },
             native: {},
         });
-
+        */
         // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-        this.subscribeStates("testVariable");
+        //this.subscribeStates("testVariable");
         // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
         // this.subscribeStates("lights.*");
         // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
@@ -65,21 +92,71 @@ class KostalPikoMpPlus extends utils.Adapter {
 			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
 		*/
         // the variable testVariable is set to true as command (ack=false)
-        await this.setStateAsync("testVariable", true);
+        //await this.setStateAsync("testVariable", true);
 
         // same thing, but the value is flagged "ack"
         // ack should be always set to true if the value is received from or acknowledged from the target system
-        await this.setStateAsync("testVariable", { val: true, ack: true });
+        //await this.setStateAsync("testVariable", { val: true, ack: true });
 
         // same thing, but the state is deleted after 30s (getState will return null afterwards)
-        await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+        //await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
 
         // examples for the checkPassword/checkGroup functions
-        let result = await this.checkPasswordAsync("admin", "iobroker");
-        this.log.info("check user admin pw iobroker: " + result);
+        //let result = await this.checkPasswordAsync("admin", "iobroker");
+        //this.log.info("check user admin pw iobroker: " + result);
 
-        result = await this.checkGroupAsync("admin", "admin");
-        this.log.info("check group user admin group admin: " + result);
+        //result = await this.checkGroupAsync("admin", "admin");
+        //this.log.info("check group user admin group admin: " + result);
+    }
+
+    private async updateStates(dom: Document, states: State[]): Promise<void> {
+        for (const s of states) {
+            let selectedValue = xpath.select1(s.xpathValue, dom);
+
+            let value: any;
+
+            if (selectedValue !== undefined) {
+                value = (<Attr>selectedValue).value;
+            }
+
+            let unit = null;
+            if (s.xpathUnit !== undefined) {
+                selectedValue = xpath.select1(s.xpathUnit, dom);
+                unit = (<Attr>selectedValue).value;
+            }
+
+            if (value !== undefined) {
+                if (s.type == "number") {
+                    value = Number(value);
+                } else if (s.type == "string") {
+                    this.log.debug(`${s.id}:${value} - it is a string then it remains a string`);
+                } else {
+                    this.log.error(`unknown cast type`);
+                }
+            }
+
+            if (value !== undefined) {
+                this.log.debug(`${s.id} has a value so we add this object with ${value} its ${typeof value}`);
+                const common: ioBroker.StateCommon = {
+                    name: s.name,
+                    type: s.type,
+                    read: s.read,
+                    write: s.write,
+                    role: "state",
+                    unit: unit !== null ? unit : undefined,
+                };
+
+                await this.setObjectNotExistsAsync(s.id, {
+                    type: "state",
+                    common: common,
+                    native: {},
+                });
+                await this.setStateAsync(s.id, { val: value, ack: true });
+            } else {
+                this.log.debug(`${s.id} has no value so we ignore it and we can delete it`);
+                await this.delObjectAsync(s.id);
+            }
+        }
     }
 
     /**
@@ -87,12 +164,9 @@ class KostalPikoMpPlus extends utils.Adapter {
      */
     private onUnload(callback: () => void): void {
         try {
+            this.clearInterval(this.refreshInterval);
             // Here you must clear all timeouts or intervals that may still be active
             // clearTimeout(timeout1);
-            // clearTimeout(timeout2);
-            // ...
-            // clearInterval(interval1);
-
             callback();
         } catch (e) {
             callback();

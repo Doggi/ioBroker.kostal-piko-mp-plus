@@ -31,41 +31,90 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var utils = __toESM(require("@iobroker/adapter-core"));
+var import_axios = __toESM(require("axios"));
+var import_xmldom = require("xmldom");
+var import_xpath = __toESM(require("xpath"));
+var import_StatesMapper = require("./StatesMapper");
 class KostalPikoMpPlus extends utils.Adapter {
   constructor(options = {}) {
     super(__spreadProps(__spreadValues({}, options), {
       name: "kostal-piko-mp-plus"
     }));
+    this.refreshInterval = void 0;
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
+    const states = import_StatesMapper.StatesMapper.states;
     this.setState("info.connection", false, true);
-    this.log.info("config: " + this.config.serverIp);
-    this.log.info("config: " + this.config.interval);
-    await this.setObjectNotExistsAsync("testVariable", {
-      type: "state",
-      common: {
-        name: "testVariable",
-        type: "boolean",
-        role: "indicator",
-        read: true,
-        write: true
-      },
-      native: {}
-    });
-    this.subscribeStates("testVariable");
-    await this.setStateAsync("testVariable", true);
-    await this.setStateAsync("testVariable", { val: true, ack: true });
-    await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-    let result = await this.checkPasswordAsync("admin", "iobroker");
-    this.log.info("check user admin pw iobroker: " + result);
-    result = await this.checkGroupAsync("admin", "admin");
-    this.log.info("check group user admin group admin: " + result);
+    this.log.debug("config.serverIp: " + this.config.serverIp);
+    this.log.debug("config.interval: " + this.config.interval);
+    const requestURL = `http://${this.config.serverIp}/measurements.xml`;
+    const requestHeader = { headers: { Accept: "application/xml" } };
+    this.refreshInterval = this.setInterval(async () => {
+      try {
+        const { data, status } = await import_axios.default.get(requestURL, requestHeader);
+        this.setState("info.connection", true, true);
+        this.log.debug(`request to ${requestURL} with status ${status}`);
+        const dom = new import_xmldom.DOMParser().parseFromString(data);
+        await this.updateStates(dom, states);
+      } catch (error) {
+        this.setState("info.connection", false, true);
+        if (import_axios.default.isAxiosError(error)) {
+          this.log.error(`error message: ${error.message}`);
+        } else {
+          this.log.error(`unexpected error: ${error}`);
+        }
+      }
+    }, this.config.interval);
+  }
+  async updateStates(dom, states) {
+    for (const s of states) {
+      let selectedValue = import_xpath.default.select1(s.xpathValue, dom);
+      let value;
+      if (selectedValue !== void 0) {
+        value = selectedValue.value;
+      }
+      let unit = null;
+      if (s.xpathUnit !== void 0) {
+        selectedValue = import_xpath.default.select1(s.xpathUnit, dom);
+        unit = selectedValue.value;
+      }
+      if (value !== void 0) {
+        if (s.type == "number") {
+          value = Number(value);
+        } else if (s.type == "string") {
+          this.log.debug(`${s.id}:${value} - it is a string then it remains a string`);
+        } else {
+          this.log.error(`unknown cast type`);
+        }
+      }
+      if (value !== void 0) {
+        this.log.debug(`${s.id} has a value so we add this object with ${value} its ${typeof value}`);
+        const common = {
+          name: s.name,
+          type: s.type,
+          read: s.read,
+          write: s.write,
+          role: "state",
+          unit: unit !== null ? unit : void 0
+        };
+        await this.setObjectNotExistsAsync(s.id, {
+          type: "state",
+          common,
+          native: {}
+        });
+        await this.setStateAsync(s.id, { val: value, ack: true });
+      } else {
+        this.log.debug(`${s.id} has no value so we ignore it and we can delete it`);
+        await this.delObjectAsync(s.id);
+      }
+    }
   }
   onUnload(callback) {
     try {
+      this.clearInterval(this.refreshInterval);
       callback();
     } catch (e) {
       callback();
