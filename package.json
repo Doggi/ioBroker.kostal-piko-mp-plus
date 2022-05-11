@@ -4,7 +4,7 @@
   "description": "Integrate your Kostal PIKO MP plus into ioBroker",
   "author": {
     "name": "Doggi",
-    "email": "soeren.grzanna@googlemail.com"
+    "email": "soeren707@freenet.de"
   },
   "homepage": "https://github.com/Doggi/ioBroker.kostal-piko-mp-plus",
   "license": "MIT",
@@ -19,6 +19,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Doggi/ioBroker.kostal-piko-mp-plus.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.0",
@@ -92,7 +95,9 @@
     "coverage": "nyc npm run test:ts",
     "lint": "eslint --ext .ts,.tsx src/",
     "translate": "translate-adapter",
-    "release": "release-script"
+    "release": "release-script patch --yes",
+    "release-minor": "release-script minor --yes",
+    "release-major": "release-script major --yes"
   },
   "nyc": {
     "include": [
