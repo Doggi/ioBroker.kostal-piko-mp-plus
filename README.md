@@ -14,6 +14,20 @@
 
 This adapter uses the XML interface of your Kostal PIKO MP PV system and provides the device information as well as the measured values.
 
+## Installation (not done yet)
+
+Please use the "adapter list" in ioBroker to install a stable version of this adapter. You can also use the CLI to install this adapter:
+
+```
+iobroker add kostal-piko-mp-plus
+```
+
+## Documentation
+
+[🇺🇸 Documentation](./docs/en/basics.md)
+
+[🇩🇪 Dokumentation](./docs/de/basics.md)
+
 ## Developer manual
 
 The device information and measured values are provided by the XML interface `http://host/measurements.xml`.
