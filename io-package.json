@@ -41,8 +41,17 @@
             "pl": "Zintegruj Kostal PIKO MP plus z ioBroker",
             "zh-cn": "将您的 Kostal PIKO MP plus 集成到 ioBroker"
         },
-        "authors": ["Doggi <soeren.grzanna@googlemail.com>"],
-        "keywords": ["kostal", "piko", "mp", "plus", "iobroker", "pv"],
+        "authors": [
+            "Doggi <soeren.grzanna@googlemail.com>"
+        ],
+        "keywords": [
+            "kostal",
+            "piko",
+            "mp",
+            "plus",
+            "iobroker",
+            "pv"
+        ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",

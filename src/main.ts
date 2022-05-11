@@ -40,7 +40,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.log.debug("config.serverIp: " + this.config.serverIp);
         this.log.debug("config.interval: " + this.config.interval);
 
-        const requestURL = `http://${this.config.serverIp}/measurements.xml`;
+        const requestURL = `${this.config.serverIp}/measurements.xml`;
         const requestHeader = { headers: { Accept: "application/xml" } };
 
         this.refreshInterval = this.setInterval(async () => {

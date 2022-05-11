@@ -12,7 +12,7 @@
                     "md": 6,
                     "lg": 6,
                     "label": "Server IP/Hostname",
-                    "help": "IP or hostname of your Kostal PIKO MP plus"
+                    "help": "IP or hostname of your Kostal PIKO MP plus. Example: http://192.168.0.100:80"
                 },
                 "interval": {
                     "type": "number",

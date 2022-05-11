@@ -7,45 +7,21 @@
 ![Number of Installations](https://iobroker.live/badges/kostal-piko-mp-plus-installed.svg)
 ![Current version in stable repository](https://iobroker.live/badges/kostal-piko-mp-plus-stable.svg)
 [![Dependency Status](https://img.shields.io/david/Doggi/iobroker.kostal-piko-mp-plus.svg)](https://david-dm.org/Doggi/iobroker.kostal-piko-mp-plus)
-
 [![NPM](https://nodei.co/npm/iobroker.kostal-piko-mp-plus.png?downloads=true)](https://nodei.co/npm/iobroker.kostal-piko-mp-plus/)
-
-**Tests:** ![Test and Release](https://github.com/Doggi/ioBroker.kostal-piko-mp-plus/workflows/Test%20and%20Release/badge.svg)
+![Test and Release](https://github.com/Doggi/ioBroker.kostal-piko-mp-plus/workflows/Test%20and%20Release/badge.svg)
 
 ## kostal-piko-mp-plus adapter for ioBroker
 
-Integrate your Kostal PIKO MP plus into ioBroker
+This adapter uses the XML interface of your Kostal PIKO MP PV system and provides the device information as well as the measured values.
 
 ## Developer manual
 
-This section is intended for the developer. It can be deleted later
+The device information and measured values are provided by the XML interface `http://host/measurements.xml`.
 
 ### Best Practices
 
 We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
 check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
-
-### Scripts in `package.json`
-
-Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
-| Script name | Description |
-|-------------|-------------|
-| `build` | Compile the TypeScript and React sources. |
-| `watch` | Compile the TypeScript and React sources and watch for changes. |
-| `build:ts` | Compile the TypeScript sources. |
-| `watch:ts` | Compile the TypeScript sources and watch for changes. |
-| `build:react` | Compile the React sources. |
-| `watch:react` | Compile the React sources and watch for changes. |
-| `test:ts` | Executes the tests you defined in `*.test.ts` files. |
-| `test:package` | Ensures your `package.json` and `io-package.json` are valid. |
-| `test:unit` | Tests the adapter startup with unit tests (fast, but might require module mocks to work). |
-| `test:integration` | Tests the adapter startup with an actual instance of ioBroker. |
-| `test` | Performs a minimal test run on package files and your tests. |
-| `check` | Performs a type-check on your code (without compiling anything). |
-| `coverage` | Generates code coverage using your test files. |
-| `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
-| `translate` | Translates texts in your adapter to all required languages, see [`@iobroker/adapter-dev`](https://github.com/ioBroker/adapter-dev#manage-translations) for more details. |
-| `release` | Creates a new release, see [`@alcalzone/release-script`](https://github.com/AlCalzone/release-script#usage) for more details. |
 
 ### Configuring the compilation
 
@@ -106,6 +82,9 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) implement polling xml api & create/update state
+-   (Doggi) added states mapper and state interface
+-   (Doggi) add wip comment
 -   (Doggi) define default values for options
 -   (Doggi) add gimp logo file
 -   (Doggi) change logo
