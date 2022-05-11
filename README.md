@@ -59,20 +59,6 @@ Additional command line options for the release script are explained in the
 To get your adapter released in ioBroker, please refer to the documentation
 of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
 
-### Test the adapter manually with dev-server
-
-Since you set up `dev-server`, you can use it to run, test and debug your adapter.
-
-You may start `dev-server` by calling from your dev directory:
-
-```bash
-dev-server watch
-```
-
-The ioBroker.admin interface will then be available at http://localhost:8081/
-
-Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev-server#command-line) for more details.
-
 ## Changelog
 
 <!--
@@ -82,6 +68,7 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) remove "Test the adapter manually with dev-server"
 -   (Doggi) implement polling xml api & create/update state
 -   (Doggi) added states mapper and state interface
 -   (Doggi) add wip comment
