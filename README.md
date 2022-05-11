@@ -68,6 +68,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) changed email
 -   (Doggi) remove "Test the adapter manually with dev-server"
 -   (Doggi) implement polling xml api & create/update state
 -   (Doggi) added states mapper and state interface
