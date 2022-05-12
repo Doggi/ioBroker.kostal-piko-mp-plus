@@ -14,6 +14,7 @@ import { StatesMapper } from "./StatesMapper";
 
 class KostalPikoMpPlus extends utils.Adapter {
     refreshInterval: any = undefined;
+    hostIpRegex = /^http[s]?:\/\/[A-Za-z0-9\.]+(:[0-9]{1,})?$/;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -37,11 +38,13 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.setState("info.connection", false, true);
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via this.config:
-        this.log.debug("config.serverIp: " + this.config.serverIp);
-        this.log.debug("config.interval: " + this.config.interval);
+        this.log.debug(`config.serverIp: ${this.config.serverIp}`);
+        this.log.debug(`config.interval: ${this.config.interval}`);
 
-        //const requestURL = `${this.config.serverIp}/measurements.xml`;
-        //const requestHeader = { headers: { Accept: "application/xml" } };
+        if (!this.hostIpRegex.test(this.config.serverIp)) {
+            this.log.error(`config.serverIp: ${this.config.serverIp} is invalid - example http://192.168.0.100`);
+            return;
+        }
 
         const client = axios.create({
             baseURL: `${this.config.serverIp}`,
@@ -50,12 +53,14 @@ class KostalPikoMpPlus extends utils.Adapter {
             responseEncoding: "utf8",
         });
 
-        this.log.debug(`axios client with base url ${this.config.serverIp} created`);
-        this.log.debug(`init fetch states`);
+        this.log.info(`axios client with base url ${this.config.serverIp} created`);
+        this.log.info(`init fetch states`);
 
         await this.refreshMeasurements(client, states);
 
+        this.log.info(`starting auto refresh each ${this.config.interval} millis`);
         this.refreshInterval = this.setInterval(async () => {
+            this.log.info(`refreshing states`);
             await this.refreshMeasurements(client, states);
         }, this.config.interval);
 

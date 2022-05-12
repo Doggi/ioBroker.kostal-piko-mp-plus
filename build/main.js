@@ -41,24 +41,31 @@ class KostalPikoMpPlus extends utils.Adapter {
       name: "kostal-piko-mp-plus"
     }));
     this.refreshInterval = void 0;
+    this.hostIpRegex = /^http[s]?:\/\/[A-Za-z0-9\.]+(:[0-9]{1,})?$/;
     this.on("ready", this.onReady.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
     const states = import_StatesMapper.StatesMapper.states;
     this.setState("info.connection", false, true);
-    this.log.debug("config.serverIp: " + this.config.serverIp);
-    this.log.debug("config.interval: " + this.config.interval);
+    this.log.debug(`config.serverIp: ${this.config.serverIp}`);
+    this.log.debug(`config.interval: ${this.config.interval}`);
+    if (!this.hostIpRegex.test(this.config.serverIp)) {
+      this.log.error(`config.serverIp: ${this.config.serverIp} is invalid - example http://192.168.0.100`);
+      return;
+    }
     const client = import_axios.default.create({
       baseURL: `${this.config.serverIp}`,
       timeout: 5e3,
       responseType: "text",
       responseEncoding: "utf8"
     });
-    this.log.debug(`axios client with base url ${this.config.serverIp} created`);
-    this.log.debug(`init fetch states`);
+    this.log.info(`axios client with base url ${this.config.serverIp} created`);
+    this.log.info(`init fetch states`);
     await this.refreshMeasurements(client, states);
+    this.log.info(`starting auto refresh each ${this.config.interval} millis`);
     this.refreshInterval = this.setInterval(async () => {
+      this.log.info(`refreshing states`);
       await this.refreshMeasurements(client, states);
     }, this.config.interval);
   }
