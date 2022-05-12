@@ -129,6 +129,7 @@ class KostalPikoMpPlus extends utils.Adapter {
   }
   onUnload(callback) {
     try {
+      this.setState("info.connection", false, true);
       this.clearInterval(this.refreshInterval);
       callback();
     } catch (e) {

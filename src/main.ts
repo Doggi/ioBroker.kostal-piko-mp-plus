@@ -184,6 +184,7 @@ class KostalPikoMpPlus extends utils.Adapter {
      */
     private onUnload(callback: () => void): void {
         try {
+            this.setState("info.connection", false, true);
             this.clearInterval(this.refreshInterval);
             // Here you must clear all timeouts or intervals that may still be active
             // clearTimeout(timeout1);
