@@ -6,7 +6,7 @@
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import { DOMParser } from "xmldom";
 import xpath from "xpath";
 import { State } from "./lib/State";
@@ -40,27 +40,23 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.log.debug("config.serverIp: " + this.config.serverIp);
         this.log.debug("config.interval: " + this.config.interval);
 
-        const requestURL = `${this.config.serverIp}/measurements.xml`;
-        const requestHeader = { headers: { Accept: "application/xml" } };
+        //const requestURL = `${this.config.serverIp}/measurements.xml`;
+        //const requestHeader = { headers: { Accept: "application/xml" } };
+
+        const client = axios.create({
+            baseURL: `${this.config.serverIp}`,
+            timeout: 5000,
+            responseType: "text",
+            responseEncoding: "utf8",
+        });
+
+        this.log.debug(`axios client with base url ${this.config.serverIp} created`);
+        this.log.debug(`init fetch states`);
+
+        await this.refreshMeasurements(client, states);
 
         this.refreshInterval = this.setInterval(async () => {
-            try {
-                const { data, status } = await axios.get<string>(requestURL, requestHeader);
-
-                this.setState("info.connection", true, true);
-
-                this.log.debug(`request to ${requestURL} with status ${status}`);
-                const dom = new DOMParser().parseFromString(data);
-                await this.updateStates(dom, states);
-            } catch (error) {
-                this.setState("info.connection", false, true);
-                this.clearInterval(this.refreshInterval);
-                if (axios.isAxiosError(error)) {
-                    this.log.error(`error message: ${error.message}`);
-                } else {
-                    this.log.error(`unexpected error: ${error}`);
-                }
-            }
+            await this.refreshMeasurements(client, states);
         }, this.config.interval);
 
         /*
@@ -108,6 +104,29 @@ class KostalPikoMpPlus extends utils.Adapter {
 
         //result = await this.checkGroupAsync("admin", "admin");
         //this.log.info("check group user admin group admin: " + result);
+    }
+
+    private async refreshMeasurements(client: AxiosInstance, states: State[]): Promise<void> {
+        try {
+            const { data, status } = await client.get("/measurements.xml");
+            this.log.debug(`request to /measurements.xml with status ${status}`);
+            if (status == 200) {
+                this.setState("info.connection", true, true);
+                const dom = new DOMParser().parseFromString(data);
+                await this.updateStates(dom, states);
+            } else {
+                this.log.error(`unexpected status code: ${status}`);
+            }
+        } catch (error) {
+            this.log.error(`set connection state to false and stop interval`);
+            this.setState("info.connection", false, true);
+            this.clearInterval(this.refreshInterval);
+            if (axios.isAxiosError(error)) {
+                this.log.error(`error message: ${error.message}`);
+            } else {
+                this.log.error(`unexpected error: ${error}`);
+            }
+        }
     }
 
     private async updateStates(dom: Document, states: State[]): Promise<void> {

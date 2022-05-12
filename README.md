@@ -82,6 +82,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) Init refresh states
 -   (Doggi) removed admin/src from npm lint command
 -   (Doggi) Admin 4 UI with no support
 -   (Doggi) emove admin code. because we use jsonConfig.js

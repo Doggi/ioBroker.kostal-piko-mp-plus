@@ -49,25 +49,40 @@ class KostalPikoMpPlus extends utils.Adapter {
     this.setState("info.connection", false, true);
     this.log.debug("config.serverIp: " + this.config.serverIp);
     this.log.debug("config.interval: " + this.config.interval);
-    const requestURL = `${this.config.serverIp}/measurements.xml`;
-    const requestHeader = { headers: { Accept: "application/xml" } };
+    const client = import_axios.default.create({
+      baseURL: `${this.config.serverIp}`,
+      timeout: 5e3,
+      responseType: "text",
+      responseEncoding: "utf8"
+    });
+    this.log.debug(`axios client with base url ${this.config.serverIp} created`);
+    this.log.debug(`init fetch states`);
+    await this.refreshMeasurements(client, states);
     this.refreshInterval = this.setInterval(async () => {
-      try {
-        const { data, status } = await import_axios.default.get(requestURL, requestHeader);
+      await this.refreshMeasurements(client, states);
+    }, this.config.interval);
+  }
+  async refreshMeasurements(client, states) {
+    try {
+      const { data, status } = await client.get("/measurements.xml");
+      this.log.debug(`request to /measurements.xml with status ${status}`);
+      if (status == 200) {
         this.setState("info.connection", true, true);
-        this.log.debug(`request to ${requestURL} with status ${status}`);
         const dom = new import_xmldom.DOMParser().parseFromString(data);
         await this.updateStates(dom, states);
-      } catch (error) {
-        this.setState("info.connection", false, true);
-        this.clearInterval(this.refreshInterval);
-        if (import_axios.default.isAxiosError(error)) {
-          this.log.error(`error message: ${error.message}`);
-        } else {
-          this.log.error(`unexpected error: ${error}`);
-        }
+      } else {
+        this.log.error(`unexpected status code: ${status}`);
       }
-    }, this.config.interval);
+    } catch (error) {
+      this.log.error(`set connection state to false and stop interval`);
+      this.setState("info.connection", false, true);
+      this.clearInterval(this.refreshInterval);
+      if (import_axios.default.isAxiosError(error)) {
+        this.log.error(`error message: ${error.message}`);
+      } else {
+        this.log.error(`unexpected error: ${error}`);
+      }
+    }
   }
   async updateStates(dom, states) {
     for (const s of states) {
