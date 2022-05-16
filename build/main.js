@@ -32,6 +32,7 @@ var __copyProps = (to, from, except, desc) => {
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_axios = __toESM(require("axios"));
+var import_https = __toESM(require("https"));
 var import_xmldom = require("xmldom");
 var import_xpath = __toESM(require("xpath"));
 var import_StatesMapper = require("./StatesMapper");
@@ -46,7 +47,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
-    const states = import_StatesMapper.StatesMapper.states;
+    var _a;
     this.setState("info.connection", false, true);
     this.log.debug(`config.serverIp: ${this.config.serverIp}`);
     this.log.debug(`config.interval: ${this.config.interval}`);
@@ -54,41 +55,45 @@ class KostalPikoMpPlus extends utils.Adapter {
       this.log.error(`config.serverIp: ${this.config.serverIp} is invalid - example http://192.168.0.100`);
       return;
     }
+    const states = import_StatesMapper.StatesMapper.states;
     const client = import_axios.default.create({
       baseURL: `${this.config.serverIp}`,
       timeout: 5e3,
       responseType: "text",
-      responseEncoding: "utf8"
+      responseEncoding: "utf8",
+      httpsAgent: new import_https.default.Agent({
+        rejectUnauthorized: false
+      })
     });
     this.log.info(`axios client with base url ${this.config.serverIp} created`);
     this.log.info(`init fetch states`);
-    await this.refreshMeasurements(client, states);
-    this.log.info(`starting auto refresh each ${this.config.interval} millis`);
-    this.refreshInterval = this.setInterval(async () => {
-      this.log.info(`refreshing states`);
-      await this.refreshMeasurements(client, states);
-    }, this.config.interval);
-  }
-  async refreshMeasurements(client, states) {
     try {
-      const { data, status } = await client.get("/measurements.xml");
-      this.log.debug(`request to /measurements.xml with status ${status}`);
-      if (status == 200) {
-        this.setState("info.connection", true, true);
-        const dom = new import_xmldom.DOMParser().parseFromString(data);
-        await this.updateStates(dom, states);
-      } else {
-        this.log.error(`unexpected status code: ${status}`);
-      }
+      await this.refreshMeasurements(client, states);
+      this.log.info(`starting auto refresh each ${this.config.interval} millis`);
+      this.refreshInterval = this.setInterval(async () => {
+        this.log.info(`refreshing states`);
+        await this.refreshMeasurements(client, states);
+      }, this.config.interval);
     } catch (error) {
       this.log.error(`set connection state to false and stop interval`);
       this.setState("info.connection", false, true);
       this.clearInterval(this.refreshInterval);
       if (import_axios.default.isAxiosError(error)) {
-        this.log.error(`error message: ${error.message}`);
+        this.log.error(`error message: ${error.message} - ${(_a = error.response) == null ? void 0 : _a.data}`);
       } else {
         this.log.error(`unexpected error: ${error}`);
       }
+    }
+  }
+  async refreshMeasurements(client, states) {
+    const { data, status } = await client.get("/measurements.xml");
+    this.log.debug(`request to /measurements.xml with status ${status}`);
+    if (status == 200) {
+      this.setState("info.connection", true, true);
+      const dom = new import_xmldom.DOMParser().parseFromString(data);
+      await this.updateStates(dom, states);
+    } else {
+      this.log.error(`unexpected status code: ${status}`);
     }
   }
   async updateStates(dom, states) {
@@ -104,22 +109,13 @@ class KostalPikoMpPlus extends utils.Adapter {
         unit = selectedValue.value;
       }
       if (value !== void 0) {
-        if (s.type == "number") {
-          value = Number(value);
-        } else if (s.type == "string") {
-          this.log.debug(`${s.id}:${value} - it is a string then it remains a string`);
-        } else {
-          this.log.error(`unknown cast type`);
-        }
-      }
-      if (value !== void 0) {
-        this.log.debug(`${s.id} has a value so we add this object with ${value} its ${typeof value}`);
+        this.log.debug(`found state ${s.id} - ${value}`);
         const common = {
           name: s.name,
-          type: s.type,
-          read: s.read,
-          write: s.write,
-          role: "state",
+          type: s.type ? s.type : "string",
+          read: s.read ? s.read : true,
+          write: s.write ? s.write : false,
+          role: s.role ? s.role : "state",
           unit: unit !== null ? unit : void 0
         };
         await this.setObjectNotExistsAsync(s.id, {
@@ -127,6 +123,7 @@ class KostalPikoMpPlus extends utils.Adapter {
           common,
           native: {}
         });
+        value = this.convertStringTo(value, common.type);
         await this.setStateAsync(s.id, { val: value, ack: true });
       } else {
         this.log.debug(`${s.id} has no value so we ignore it and we can delete it`);
@@ -142,6 +139,18 @@ class KostalPikoMpPlus extends utils.Adapter {
     } catch (e) {
       callback();
     }
+  }
+  convertStringTo(value, typeString) {
+    this.log.debug(`try to convert ${value} to ${typeString}`);
+    let convertedValue;
+    if (typeString == "number") {
+      convertedValue = Number(value);
+    } else if (typeString == "string") {
+      convertedValue = value;
+    } else {
+      throw new Error(`unknown cast type - ${typeString}`);
+    }
+    return convertedValue;
   }
 }
 if (require.main !== module) {
