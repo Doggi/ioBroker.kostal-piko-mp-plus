@@ -148,14 +148,14 @@ export class StatesMapper {
             xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Current2']/@Value",
             xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Current2']/@Unit",
             id: "measurements.dccurrent2",
-            name: "DC Current 1",
+            name: "DC Current 2",
             type: "number",
         },
         {
             xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Power1']/@Value",
             xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Power1']/@Unit",
             id: "measurements.dcpower2",
-            name: "DC Power 1",
+            name: "DC Power 2",
             type: "number",
         },
         {
