@@ -15,7 +15,8 @@ import { StatesMapper } from "./StatesMapper";
 
 class KostalPikoMpPlus extends utils.Adapter {
     refreshInterval: any = undefined;
-    hostIpRegex = /^http[s]?:\/\/[A-Za-z0-9\.]+(:[0-9]{1,})?$/;
+    serverProtocolRegex = /^http[s]?$/;
+    serverIpRegex = /^[A-Za-z0-9\.]+$/;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -35,19 +36,28 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.setState("info.connection", false, true);
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via this.config:
-        this.log.debug(`config.serverIp: ${this.config.serverIp}`);
+        this.log.debug(`config.serverIp: ${this.config.serverProtocol}`);
+        this.log.debug(`config.interval: ${this.config.serverIp}`);
+        this.log.debug(`config.serverIp: ${this.config.serverPort}`);
         this.log.debug(`config.interval: ${this.config.interval}`);
 
-        if (!this.hostIpRegex.test(this.config.serverIp)) {
-            this.log.error(`config.serverIp: ${this.config.serverIp} is invalid - example http://192.168.0.100`);
+        if (!this.serverProtocolRegex.test(this.config.serverProtocol)) {
+            this.log.error(`Server protocol: ${this.config.serverProtocol} is invalid - example http or https`);
             return;
         }
+
+        if (!this.serverIpRegex.test(this.config.serverIp)) {
+            this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
+            return;
+        }
+
+        const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
 
         // Load states config
         const states = StatesMapper.states;
 
         const client = axios.create({
-            baseURL: `${this.config.serverIp}`,
+            baseURL: `${serverBaseUrl}`,
             timeout: 5000,
             responseType: "text",
             responseEncoding: "utf8",
@@ -56,7 +66,7 @@ class KostalPikoMpPlus extends utils.Adapter {
             }),
         });
 
-        this.log.info(`axios client with base url ${this.config.serverIp} created`);
+        this.log.info(`axios client with base url ${serverBaseUrl} created`);
         this.log.info(`init fetch states`);
 
         try {

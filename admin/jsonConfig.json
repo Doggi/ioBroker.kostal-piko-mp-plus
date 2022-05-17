@@ -6,19 +6,37 @@
             "type": "panel",
             "label": "Options",
             "items": {
+                "serverProtocol": {
+                    "type": "text",
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "label": "Protocol",
+                    "help": "Protocol of your Kostal PIKO MP plus. Example: http or https"
+                },
                 "serverIp": {
                     "type": "text",
                     "sm": 12,
-                    "md": 6,
-                    "lg": 6,
+                    "md": 4,
+                    "lg": 2,
                     "label": "Server IP/Hostname",
-                    "help": "IP or hostname of your Kostal PIKO MP plus. Example: http://192.168.0.100:80"
+                    "help": "IP or hostname of your Kostal PIKO MP plus. Example: 192.168.0.100"
+                },
+                "serverPort": {
+                    "type": "number",
+                    "sm": 6,
+                    "md": 2,
+                    "lg": 2,
+                    "min": 0,
+                    "max": 65535,
+                    "label": "Port",
+                    "help": "Port of your Kostal PIKO MP plus. Example: 80"
                 },
                 "interval": {
                     "type": "number",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
-                    "lg": 6,
+                    "lg": 2,
                     "min": 10000,
                     "max": 3600000,
                     "label": "Interval (ms)",

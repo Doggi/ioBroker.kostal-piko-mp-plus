@@ -73,7 +73,9 @@
         ]
     },
     "native": {
-        "serverIp": "http://<ip>:<port>",
+        "serverProtocol": "http",
+        "serverIp": "",
+        "serverPort": "80",
         "interval": 300000
     },
     "objects": [],
