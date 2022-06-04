@@ -154,8 +154,8 @@ export class StatesMapper {
         {
             xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Power1']/@Value",
             xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Power1']/@Unit",
-            id: "measurements.dcpower2",
-            name: "DC Power 2",
+            id: "measurements.dcpower1",
+            name: "DC Power 1",
             type: "number",
         },
         {
