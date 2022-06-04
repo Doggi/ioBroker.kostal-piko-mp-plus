@@ -16,7 +16,6 @@
                 "zh-cn": "首次出版"
             }
         },
-        "title": "Kostal PIKO MP plus",
         "titleLang": {
             "en": "Kostal PIKO MP plus",
             "de": "Kostal PIKO MP plus",
@@ -42,7 +41,7 @@
             "zh-cn": "将您的 Kostal PIKO MP plus 集成到 ioBroker"
         },
         "authors": ["Doggi <soeren707@freenet.de>"],
-        "keywords": ["kostal", "piko", "mp", "plus", "iobroker", "pv"],
+        "keywords": ["kostal", "piko", "mp", "plus", "pv"],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
