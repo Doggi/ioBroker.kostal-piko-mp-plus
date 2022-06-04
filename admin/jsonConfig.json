@@ -7,10 +7,21 @@
             "label": "Options",
             "items": {
                 "serverProtocol": {
-                    "type": "text",
+                    "type": "select",
                     "sm": 6,
                     "md": 4,
                     "lg": 2,
+                    "options": [
+                        {
+                            "label": "http",
+                            "value": "http"
+                        },
+                        {
+                            "label": "https",
+                            "value": "https"
+                        }
+                    ],
+                    "default": "http",
                     "label": "Protocol",
                     "help": "Protocol of your Kostal PIKO MP plus. Example: http or https"
                 },

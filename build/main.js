@@ -42,7 +42,6 @@ class KostalPikoMpPlus extends utils.Adapter {
       name: "kostal-piko-mp-plus"
     }));
     this.refreshInterval = void 0;
-    this.serverProtocolRegex = /^http[s]?$/;
     this.serverIpRegex = /^[A-Za-z0-9\.]+$/;
     this.on("ready", this.onReady.bind(this));
     this.on("unload", this.onUnload.bind(this));
@@ -54,10 +53,6 @@ class KostalPikoMpPlus extends utils.Adapter {
     this.log.debug(`config.interval: ${this.config.serverIp}`);
     this.log.debug(`config.serverIp: ${this.config.serverPort}`);
     this.log.debug(`config.interval: ${this.config.interval}`);
-    if (!this.serverProtocolRegex.test(this.config.serverProtocol)) {
-      this.log.error(`Server protocol: ${this.config.serverProtocol} is invalid - example http or https`);
-      return;
-    }
     if (!this.serverIpRegex.test(this.config.serverIp)) {
       this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
       return;

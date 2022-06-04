@@ -82,6 +82,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) change admin config - use now select instead of text input for protocol
 -   (Doggi) change api endpoint to all.xml (before measurements.xml)
 -   (Doggi) remove Adapter Check warnings
 -   (dependabot[bot]) Bump typescript from 4.5.5 to 4.7.2
