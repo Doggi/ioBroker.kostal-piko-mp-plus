@@ -90,8 +90,9 @@ class KostalPikoMpPlus extends utils.Adapter {
     }
 
     private async refreshMeasurements(client: AxiosInstance, states: State[]): Promise<void> {
-        const { data, status } = await client.get("/measurements.xml");
-        this.log.debug(`request to /measurements.xml with status ${status}`);
+        const endpoint = "/all.xml";
+        const { data, status } = await client.get(endpoint);
+        this.log.debug(`request to ${endpoint} with status ${status}`);
         if (status == 200) {
             this.setState("info.connection", true, true);
             const dom = new DOMParser().parseFromString(data);

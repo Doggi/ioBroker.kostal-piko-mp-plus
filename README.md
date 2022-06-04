@@ -30,7 +30,7 @@ iobroker add kostal-piko-mp-plus
 
 ## Developer manual
 
-The device information and measured values are provided by the XML interface `http://host/measurements.xml`.
+The device information and measured values are provided by the XML interface `http://host/all.xml`.
 
 ### Best Practices
 
@@ -82,6 +82,14 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) remove Adapter Check warnings
+-   (dependabot[bot]) Bump typescript from 4.5.5 to 4.7.2
+-   (dependabot[bot]) Bump @iobroker/adapter-react from 2.0.22 to 2.1.0
+-   (dependabot[bot]) Bump ts-node from 10.7.0 to 10.8.0 (#2)
+-   (dependabot[bot]) Bump @typescript-eslint/eslint-plugin from 5.22.0 to 5.27.0 (#3)
+-   (Doggi) fixed state names
+-   (Doggi) Settings separated
+-   (Doggi) add Server Ip validation
 -   (Doggi) Init refresh states
 -   (Doggi) removed admin/src from npm lint command
 -   (Doggi) Admin 4 UI with no support
