@@ -82,6 +82,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) update docs
 -   (Doggi) change admin config - use now select instead of text input for protocol
 -   (Doggi) change api endpoint to all.xml (before measurements.xml)
 -   (Doggi) remove Adapter Check warnings
