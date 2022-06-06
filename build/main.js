@@ -59,6 +59,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     }
     const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
     const states = import_StatesMapper.StatesMapper.states;
+    this.generateMdStateTable(states);
     const client = import_axios.default.create({
       baseURL: `${serverBaseUrl}`,
       timeout: 5e3,
@@ -155,6 +156,19 @@ class KostalPikoMpPlus extends utils.Adapter {
       throw new Error(`unknown cast type - ${typeString}`);
     }
     return convertedValue;
+  }
+  generateMdStateTable(states) {
+    let table;
+    table = `
+|Name|Id|Value Type|xPath|
+`;
+    table = `${table}|---|---|---|---|
+`;
+    states.forEach((e) => {
+      table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|
+`;
+    });
+    this.log.debug(`${table}`);
   }
 }
 if (require.main !== module) {

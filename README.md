@@ -28,6 +28,10 @@ iobroker add kostal-piko-mp-plus
 
 [🇩🇪 Dokumentation](./docs/de/basics.md)
 
+## Supported values
+
+[Supported Values](./docs/supportedValues.md)
+
 ## Developer manual
 
 The device information and measured values are provided by the XML interface `http://host/all.xml`.
