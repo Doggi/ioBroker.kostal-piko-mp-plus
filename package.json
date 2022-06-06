@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kostal-piko-mp-plus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Integrate your Kostal PIKO MP plus into ioBroker",
   "author": {
     "name": "Doggi",

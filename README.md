@@ -84,7 +84,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.0.2 (2022-06-06)
 
 -   (Doggi) update docs
 -   (Doggi) change admin config - use now select instead of text input for protocol
