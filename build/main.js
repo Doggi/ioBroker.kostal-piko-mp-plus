@@ -59,6 +59,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
     const states = import_StatesMapper.StatesMapper.states;
     this.generateMdStateTable(states);
+    this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
     const client = this.createClient(serverBaseUrl);
     this.log.info(`axios client with base url ${serverBaseUrl} created`);
     this.log.info(`init fetch states`);
@@ -118,25 +119,24 @@ class KostalPikoMpPlus extends utils.Adapter {
       }
       if (value !== void 0) {
         this.log.debug(`found state ${s.id} - ${value}`);
-        const common = {
-          name: s.name,
-          type: s.type ? s.type : "string",
-          read: s.read ? s.read : true,
-          write: s.write ? s.write : false,
-          role: s.role ? s.role : "state",
-          unit: unit !== null ? unit : void 0
-        };
-        await this.setObjectNotExistsAsync(s.id, {
-          type: "state",
-          common,
-          native: {}
-        });
+        const common = this.createStateCommonFromState(s, unit);
+        await this.setObjectNotExistsAsync(s.id, { type: "state", common, native: {} });
         value = this.convertStringTo(value, common.type);
         await this.setStateAsync(s.id, { val: value, ack: true });
       } else {
         this.log.debug(`${s.id} has no value so we ignore it`);
       }
     }
+  }
+  createStateCommonFromState(s, unit) {
+    return {
+      name: s.name,
+      type: s.type ? s.type : "string",
+      read: s.read ? s.read : true,
+      write: s.write ? s.write : false,
+      role: s.role ? s.role : "state",
+      unit: unit !== null ? unit : void 0
+    };
   }
   onUnload(callback) {
     try {

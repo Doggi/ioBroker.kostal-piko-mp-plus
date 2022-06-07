@@ -51,11 +51,11 @@ class KostalPikoMpPlus extends utils.Adapter {
         const states = StatesMapper.states;
         this.generateMdStateTable(states);
 
+        this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
         const client = this.createClient(serverBaseUrl);
 
         this.log.info(`axios client with base url ${serverBaseUrl} created`);
         this.log.info(`init fetch states`);
-
         await this.refreshMeasurements(client, states);
 
         this.log.info(`starting auto refresh each ${this.config.interval} millis`);
@@ -119,20 +119,9 @@ class KostalPikoMpPlus extends utils.Adapter {
 
             if (value !== undefined) {
                 this.log.debug(`found state ${s.id} - ${value}`);
-                const common: ioBroker.StateCommon = {
-                    name: s.name,
-                    type: s.type ? s.type : "string",
-                    read: s.read ? s.read : true,
-                    write: s.write ? s.write : false,
-                    role: s.role ? s.role : "state",
-                    unit: unit !== null ? unit : undefined,
-                };
+                const common: ioBroker.StateCommon = this.createStateCommonFromState(s, unit);
 
-                await this.setObjectNotExistsAsync(s.id, {
-                    type: "state",
-                    common: common,
-                    native: {},
-                });
+                await this.setObjectNotExistsAsync(s.id, { type: "state", common: common, native: {} });
 
                 value = this.convertStringTo(value, common.type);
 
@@ -141,6 +130,17 @@ class KostalPikoMpPlus extends utils.Adapter {
                 this.log.debug(`${s.id} has no value so we ignore it`);
             }
         }
+    }
+
+    private createStateCommonFromState(s: State, unit: string | null): ioBroker.StateCommon {
+        return {
+            name: s.name,
+            type: s.type ? s.type : "string",
+            read: s.read ? s.read : true,
+            write: s.write ? s.write : false,
+            role: s.role ? s.role : "state",
+            unit: unit !== null ? unit : undefined,
+        };
     }
 
     /**
