@@ -131,8 +131,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         value = this.convertStringTo(value, common.type);
         await this.setStateAsync(s.id, { val: value, ack: true });
       } else {
-        this.log.debug(`${s.id} has no value so we ignore it and we can delete it`);
-        await this.delObjectAsync(s.id);
+        this.log.debug(`${s.id} has no value so we ignore it`);
       }
     }
   }
