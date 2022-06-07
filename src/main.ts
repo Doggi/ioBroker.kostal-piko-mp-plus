@@ -51,7 +51,22 @@ class KostalPikoMpPlus extends utils.Adapter {
         const states = StatesMapper.states;
         this.generateMdStateTable(states);
 
-        const client = axios.create({
+        const client = this.createClient(serverBaseUrl);
+
+        this.log.info(`axios client with base url ${serverBaseUrl} created`);
+        this.log.info(`init fetch states`);
+
+        await this.refreshMeasurements(client, states);
+
+        this.log.info(`starting auto refresh each ${this.config.interval} millis`);
+        this.refreshInterval = this.setInterval(async () => {
+            this.log.info(`refreshing states`);
+            await this.refreshMeasurements(client, states);
+        }, this.config.interval);
+    }
+
+    private createClient(serverBaseUrl: string): AxiosInstance {
+        return axios.create({
             baseURL: `${serverBaseUrl}`,
             timeout: 5000,
             responseType: "text",
@@ -60,18 +75,20 @@ class KostalPikoMpPlus extends utils.Adapter {
                 rejectUnauthorized: false,
             }),
         });
+    }
 
-        this.log.info(`axios client with base url ${serverBaseUrl} created`);
-        this.log.info(`init fetch states`);
-
+    private async refreshMeasurements(client: AxiosInstance, states: State[]): Promise<void> {
+        const endpoint = "/all.xml";
         try {
-            await this.refreshMeasurements(client, states);
-
-            this.log.info(`starting auto refresh each ${this.config.interval} millis`);
-            this.refreshInterval = this.setInterval(async () => {
-                this.log.info(`refreshing states`);
-                await this.refreshMeasurements(client, states);
-            }, this.config.interval);
+            const { data, status } = await client.get(endpoint);
+            this.log.debug(`request to ${endpoint} with status ${status}`);
+            if (status == 200) {
+                this.setState("info.connection", true, true);
+                const dom = new DOMParser().parseFromString(data);
+                await this.updateStates(dom, states);
+            } else {
+                this.log.error(`unexpected status code: ${status}`);
+            }
         } catch (error) {
             this.log.error(`set connection state to false and stop interval`);
             this.setState("info.connection", false, true);
@@ -81,19 +98,6 @@ class KostalPikoMpPlus extends utils.Adapter {
             } else {
                 this.log.error(`unexpected error: ${error}`);
             }
-        }
-    }
-
-    private async refreshMeasurements(client: AxiosInstance, states: State[]): Promise<void> {
-        const endpoint = "/all.xml";
-        const { data, status } = await client.get(endpoint);
-        this.log.debug(`request to ${endpoint} with status ${status}`);
-        if (status == 200) {
-            this.setState("info.connection", true, true);
-            const dom = new DOMParser().parseFromString(data);
-            await this.updateStates(dom, states);
-        } else {
-            this.log.error(`unexpected status code: ${status}`);
         }
     }
 
