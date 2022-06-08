@@ -84,7 +84,7 @@ of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#req
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.0.3 (2022-06-08)
 
 -   (Doggi) switch interval to timeout
 -   (Doggi) deleting from states without values are removed
