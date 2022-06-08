@@ -48,9 +48,9 @@ class KostalPikoMpPlus extends utils.Adapter {
   }
   async onReady() {
     this.setState("info.connection", false, true);
-    this.log.debug(`config.serverIp: ${this.config.serverProtocol}`);
-    this.log.debug(`config.interval: ${this.config.serverIp}`);
-    this.log.debug(`config.serverIp: ${this.config.serverPort}`);
+    this.log.debug(`config.serverProtocol: ${this.config.serverProtocol}`);
+    this.log.debug(`config.serverIp: ${this.config.serverIp}`);
+    this.log.debug(`config.serverPort: ${this.config.serverPort}`);
     this.log.debug(`config.interval: ${this.config.interval}`);
     if (this.serverIpRegex.test(this.config.serverIp)) {
       const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
@@ -79,7 +79,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     var _a;
     const endpoint = "/all.xml";
     try {
-      this.log.info(`refreshing states`);
+      this.log.debug(`refreshing states`);
       const { data, status } = await client.get(endpoint);
       this.log.debug(`request to ${endpoint} with status ${status}`);
       if (status == 200) {
@@ -90,6 +90,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.refreshTimeout = this.setTimeout(() => this.refreshMeasurements(client, states), this.config.interval);
       } else {
         this.log.error(`unexpected status code: ${status}`);
+        this.setState("info.connection", false, true);
       }
     } catch (error) {
       this.log.error(`set connection state to false and stop refreshing`);
@@ -158,12 +159,12 @@ class KostalPikoMpPlus extends utils.Adapter {
   generateMdStateTable(states) {
     let table;
     table = `
-|Name|Id|Value Type|xPath Value|xPath Unit|
+|Id|Name|Value Type|xPath Value|xPath Unit|
 `;
     table = `${table}|---|---|---|---|---|
 `;
     states.forEach((e) => {
-      table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|${e.xpathUnit ? e.xpathUnit : "-"}|
+      table = `${table}|${e.id}|${e.name}|${e.type ? e.type : "string"}|${e.xpathValue}|${e.xpathUnit ? e.xpathUnit : "-"}|
 `;
     });
     this.log.debug(`${table}`);

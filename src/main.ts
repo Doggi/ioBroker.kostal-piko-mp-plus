@@ -35,9 +35,9 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.setState("info.connection", false, true);
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via this.config:
-        this.log.debug(`config.serverIp: ${this.config.serverProtocol}`);
-        this.log.debug(`config.interval: ${this.config.serverIp}`);
-        this.log.debug(`config.serverIp: ${this.config.serverPort}`);
+        this.log.debug(`config.serverProtocol: ${this.config.serverProtocol}`);
+        this.log.debug(`config.serverIp: ${this.config.serverIp}`);
+        this.log.debug(`config.serverPort: ${this.config.serverPort}`);
         this.log.debug(`config.interval: ${this.config.interval}`);
 
         if (this.serverIpRegex.test(this.config.serverIp)) {
@@ -170,10 +170,10 @@ class KostalPikoMpPlus extends utils.Adapter {
 
     private generateMdStateTable(states: State[]): void {
         let table: string;
-        table = `\n|Name|Id|Value Type|xPath Value|xPath Unit|\n`;
+        table = `\n|Id|Name|Value Type|xPath Value|xPath Unit|\n`;
         table = `${table}|---|---|---|---|---|\n`;
         states.forEach((e) => {
-            table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|${
+            table = `${table}|${e.id}|${e.name}|${e.type ? e.type : "string"}|${e.xpathValue}|${
                 e.xpathUnit ? e.xpathUnit : "-"
             }|\n`;
         });
