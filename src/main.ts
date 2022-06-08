@@ -86,6 +86,7 @@ class KostalPikoMpPlus extends utils.Adapter {
                 );
             } else {
                 this.log.error(`unexpected status code: ${status}`);
+                this.setState("info.connection", false, true);
             }
         } catch (error) {
             this.log.error(`set connection state to false and stop refreshing`);
