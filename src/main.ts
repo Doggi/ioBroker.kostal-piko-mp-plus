@@ -14,7 +14,7 @@ import { State } from "./lib/State";
 import { StatesMapper } from "./StatesMapper";
 
 class KostalPikoMpPlus extends utils.Adapter {
-    refreshInterval: any = undefined;
+    refreshTimeout: any = undefined;
     serverIpRegex = /^[A-Za-z0-9\.]+$/;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
@@ -40,29 +40,21 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.log.debug(`config.serverIp: ${this.config.serverPort}`);
         this.log.debug(`config.interval: ${this.config.interval}`);
 
-        if (!this.serverIpRegex.test(this.config.serverIp)) {
-            this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
-            return;
-        }
+        if (this.serverIpRegex.test(this.config.serverIp)) {
+            const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
 
-        const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
+            // Load states config
+            const states = StatesMapper.states;
+            this.generateMdStateTable(states);
 
-        // Load states config
-        const states = StatesMapper.states;
-        this.generateMdStateTable(states);
+            this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
+            const client = this.createClient(serverBaseUrl);
 
-        this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
-        const client = this.createClient(serverBaseUrl);
-
-        this.log.info(`axios client with base url ${serverBaseUrl} created`);
-        this.log.info(`init fetch states`);
-        await this.refreshMeasurements(client, states);
-
-        this.log.info(`starting auto refresh each ${this.config.interval} millis`);
-        this.refreshInterval = this.setInterval(async () => {
-            this.log.info(`refreshing states`);
+            this.log.info(`axios client with base url ${serverBaseUrl} created`);
             await this.refreshMeasurements(client, states);
-        }, this.config.interval);
+        } else {
+            this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
+        }
     }
 
     private createClient(serverBaseUrl: string): AxiosInstance {
@@ -80,19 +72,24 @@ class KostalPikoMpPlus extends utils.Adapter {
     private async refreshMeasurements(client: AxiosInstance, states: State[]): Promise<void> {
         const endpoint = "/all.xml";
         try {
+            this.log.info(`refreshing states`);
             const { data, status } = await client.get(endpoint);
             this.log.debug(`request to ${endpoint} with status ${status}`);
             if (status == 200) {
                 this.setState("info.connection", true, true);
                 const dom = new DOMParser().parseFromString(data);
                 await this.updateStates(dom, states);
+                this.log.debug(`create refresh timer`);
+                this.refreshTimeout = this.setTimeout(
+                    () => this.refreshMeasurements(client, states),
+                    this.config.interval,
+                );
             } else {
                 this.log.error(`unexpected status code: ${status}`);
             }
         } catch (error) {
-            this.log.error(`set connection state to false and stop interval`);
+            this.log.error(`set connection state to false and stop refreshing`);
             this.setState("info.connection", false, true);
-            this.clearInterval(this.refreshInterval);
             if (axios.isAxiosError(error)) {
                 this.log.error(`error message: ${error.message} - ${error.response?.data}`);
             } else {
@@ -149,7 +146,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     private onUnload(callback: () => void): void {
         try {
             this.setState("info.connection", false, true);
-            this.clearInterval(this.refreshInterval);
+            this.clearTimeout(this.refreshTimeout);
             callback();
         } catch (e) {
             callback();
@@ -172,10 +169,12 @@ class KostalPikoMpPlus extends utils.Adapter {
 
     private generateMdStateTable(states: State[]): void {
         let table: string;
-        table = `\n|Name|Id|Value Type|xPath|\n`;
-        table = `${table}|---|---|---|---|\n`;
+        table = `\n|Name|Id|Value Type|xPath Value|xPath Unit|\n`;
+        table = `${table}|---|---|---|---|---|\n`;
         states.forEach((e) => {
-            table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|\n`;
+            table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|${
+                e.xpathUnit ? e.xpathUnit : "-"
+            }|\n`;
         });
         this.log.debug(`${table}`);
     }

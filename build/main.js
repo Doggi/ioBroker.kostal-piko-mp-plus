@@ -41,7 +41,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     super(__spreadProps(__spreadValues({}, options), {
       name: "kostal-piko-mp-plus"
     }));
-    this.refreshInterval = void 0;
+    this.refreshTimeout = void 0;
     this.serverIpRegex = /^[A-Za-z0-9\.]+$/;
     this.on("ready", this.onReady.bind(this));
     this.on("unload", this.onUnload.bind(this));
@@ -52,23 +52,17 @@ class KostalPikoMpPlus extends utils.Adapter {
     this.log.debug(`config.interval: ${this.config.serverIp}`);
     this.log.debug(`config.serverIp: ${this.config.serverPort}`);
     this.log.debug(`config.interval: ${this.config.interval}`);
-    if (!this.serverIpRegex.test(this.config.serverIp)) {
-      this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
-      return;
-    }
-    const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
-    const states = import_StatesMapper.StatesMapper.states;
-    this.generateMdStateTable(states);
-    this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
-    const client = this.createClient(serverBaseUrl);
-    this.log.info(`axios client with base url ${serverBaseUrl} created`);
-    this.log.info(`init fetch states`);
-    await this.refreshMeasurements(client, states);
-    this.log.info(`starting auto refresh each ${this.config.interval} millis`);
-    this.refreshInterval = this.setInterval(async () => {
-      this.log.info(`refreshing states`);
+    if (this.serverIpRegex.test(this.config.serverIp)) {
+      const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
+      const states = import_StatesMapper.StatesMapper.states;
+      this.generateMdStateTable(states);
+      this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
+      const client = this.createClient(serverBaseUrl);
+      this.log.info(`axios client with base url ${serverBaseUrl} created`);
       await this.refreshMeasurements(client, states);
-    }, this.config.interval);
+    } else {
+      this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
+    }
   }
   createClient(serverBaseUrl) {
     return import_axios.default.create({
@@ -85,19 +79,21 @@ class KostalPikoMpPlus extends utils.Adapter {
     var _a;
     const endpoint = "/all.xml";
     try {
+      this.log.info(`refreshing states`);
       const { data, status } = await client.get(endpoint);
       this.log.debug(`request to ${endpoint} with status ${status}`);
       if (status == 200) {
         this.setState("info.connection", true, true);
         const dom = new import_xmldom.DOMParser().parseFromString(data);
         await this.updateStates(dom, states);
+        this.log.debug(`create refresh timer`);
+        this.refreshTimeout = this.setTimeout(() => this.refreshMeasurements(client, states), this.config.interval);
       } else {
         this.log.error(`unexpected status code: ${status}`);
       }
     } catch (error) {
-      this.log.error(`set connection state to false and stop interval`);
+      this.log.error(`set connection state to false and stop refreshing`);
       this.setState("info.connection", false, true);
-      this.clearInterval(this.refreshInterval);
       if (import_axios.default.isAxiosError(error)) {
         this.log.error(`error message: ${error.message} - ${(_a = error.response) == null ? void 0 : _a.data}`);
       } else {
@@ -141,7 +137,7 @@ class KostalPikoMpPlus extends utils.Adapter {
   onUnload(callback) {
     try {
       this.setState("info.connection", false, true);
-      this.clearInterval(this.refreshInterval);
+      this.clearTimeout(this.refreshTimeout);
       callback();
     } catch (e) {
       callback();
@@ -162,12 +158,12 @@ class KostalPikoMpPlus extends utils.Adapter {
   generateMdStateTable(states) {
     let table;
     table = `
-|Name|Id|Value Type|xPath|
+|Name|Id|Value Type|xPath Value|xPath Unit|
 `;
-    table = `${table}|---|---|---|---|
+    table = `${table}|---|---|---|---|---|
 `;
     states.forEach((e) => {
-      table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|
+      table = `${table}|${e.name}|${e.id}|${e.type ? e.type : "string"}|${e.xpathValue}|${e.xpathUnit ? e.xpathUnit : "-"}|
 `;
     });
     this.log.debug(`${table}`);
