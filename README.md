@@ -36,12 +36,19 @@ iobroker add kostal-piko-mp-plus
 
 The device information and measured values are provided by the XML interface `http://host/all.xml`.
 
+[XML Data interfaces description](https://www.kostal-solar-electric.com/en-gb/products/hybrid-inverter/piko-mp-plus/-/media/document-library-folder---kse/2021/02/17/15/19/ba-protocol_piko-mp-plus_en.pdf)
+
 ## Changelog
 
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (Doggi) set connection status to false when response code isnt 200
+-   (Doggi) log message "refreshing states" now in debug log
 
 ### 0.0.3 (2022-06-08)
 
