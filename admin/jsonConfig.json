@@ -52,6 +52,27 @@
                     "max": 3600000,
                     "label": "Interval (ms)",
                     "help": "Refresh interval in milliseconds"
+                },
+                "failCount": {
+                    "newLine": true,
+                    "type": "number",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 2,
+                    "min": 0,
+                    "max": 10,
+                    "label": "Number of retries",
+                    "help": "Number of retries in case of an error"
+                },
+                "failTimeout": {
+                    "type": "number",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 2,
+                    "min": 10000,
+                    "max": 600000,
+                    "label": "Timeout (ms) for Retry",
+                    "help": "After how many milliseconds a retry is started, in case of an error."
                 }
             }
         }

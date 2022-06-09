@@ -3,5 +3,9 @@
     "Server IP/Hostname": "Server IP/hostnaam",
     "IP or hostname of your Kostal PIKO MP plus": "IP of hostnaam van uw Kostal PIKO MP plus",
     "Interval (ms)": "Interval (ms)",
-    "Refresh interval in milliseconds": "Vernieuwingsinterval in milliseconden"
+    "Refresh interval in milliseconds": "Vernieuwingsinterval in milliseconden",
+    "Number of retries": "Aantal nieuwe pogingen",
+    "Number of retries in case of an error": "Aantal nieuwe pogingen in geval van een fout",
+    "Timeout (ms) for Retry": "Time-out (ms) voor opnieuw proberen",
+    "After how many milliseconds a retry is started, in case of an error.": "Na hoeveel milliseconden wordt een nieuwe poging gestart, in geval van een fout"
 }

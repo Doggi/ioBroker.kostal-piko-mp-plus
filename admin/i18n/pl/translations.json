@@ -1,7 +1,11 @@
 {
     "Options": "Opcje",
-    "Server IP/Hostname": "IP serwera/nazwa hosta",
+    "Server IP/Hostname": "IP/nazwa hosta serwera",
     "IP or hostname of your Kostal PIKO MP plus": "IP lub nazwa hosta Twojego Kostal PIKO MP plus",
     "Interval (ms)": "Interwał (ms)",
-    "Refresh interval in milliseconds": "Interwał odświeżania w milisekundach"
+    "Refresh interval in milliseconds": "Interwał odświeżania w milisekundach",
+    "Number of retries": "Liczba ponownych prób",
+    "Number of retries in case of an error": "Liczba ponownych prób w przypadku błędu",
+    "Timeout (ms) for Retry": "Limit czasu (ms) na ponowną próbę",
+    "After how many milliseconds a retry is started, in case of an error.": "Po ilu milisekundach rozpoczyna się ponowna próba w przypadku błędu"
 }

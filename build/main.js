@@ -43,6 +43,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     }));
     this.refreshTimeout = void 0;
     this.serverIpRegex = /^[A-Za-z0-9\.]+$/;
+    this.failCounter = 0;
     this.on("ready", this.onReady.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
@@ -77,6 +78,7 @@ class KostalPikoMpPlus extends utils.Adapter {
   }
   async refreshMeasurements(client, states) {
     const endpoint = "/all.xml";
+    let failed = false;
     try {
       this.log.debug(`refreshing states`);
       const { data, status } = await client.get(endpoint);
@@ -90,14 +92,25 @@ class KostalPikoMpPlus extends utils.Adapter {
       } else {
         this.log.error(`unexpected status code: ${status}`);
         this.setState("info.connection", false, true);
+        failed = true;
       }
     } catch (error) {
-      this.log.error(`set connection state to false and stop refreshing`);
+      this.log.error(`set connection state to false`);
       this.setState("info.connection", false, true);
       if (import_axios.default.isAxiosError(error)) {
         this.log.error(`error message: ${error.message}${error.response ? " - " + error.response.data : ""}`);
       } else {
         this.log.error(`unexpected error: ${error}`);
+      }
+      failed = true;
+    }
+    if (failed) {
+      this.failCounter++;
+      if (this.failCounter <= this.config.failCount) {
+        this.log.info(`Retry ${this.failCounter} from ${this.config.failCount} in ${this.config.failTimeout} ms`);
+        this.refreshTimeout = this.setTimeout(() => this.refreshMeasurements(client, states), this.config.failTimeout);
+      } else {
+        this.log.error(`Hmm, too bad then let's leave it at that. Please check if the Kostal Piko MP Plus is really available under the settings you made in the preferences.`);
       }
     }
   }

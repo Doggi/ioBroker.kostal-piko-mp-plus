@@ -8,6 +8,8 @@ declare global {
             serverIp: string;
             serverPort: number;
             interval: number;
+            failCount: number;
+            failTimeout: number;
         }
     }
 }

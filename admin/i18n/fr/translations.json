@@ -3,5 +3,9 @@
     "Server IP/Hostname": "IP/nom d'hôte du serveur",
     "IP or hostname of your Kostal PIKO MP plus": "IP ou nom d'hôte de votre Kostal PIKO MP plus",
     "Interval (ms)": "Intervalle (ms)",
-    "Refresh interval in milliseconds": "Intervalle de rafraîchissement en millisecondes"
+    "Refresh interval in milliseconds": "Intervalle de rafraîchissement en millisecondes",
+    "Number of retries": "Nombre de tentatives",
+    "Number of retries in case of an error": "Nombre de tentatives en cas d'erreur",
+    "Timeout (ms) for Retry": "Délai d'expiration (ms) pour une nouvelle tentative",
+    "After how many milliseconds a retry is started, in case of an error.": "Après combien de millisecondes une nouvelle tentative est lancée, en cas d'erreur"
 }

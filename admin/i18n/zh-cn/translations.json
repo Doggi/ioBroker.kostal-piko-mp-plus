@@ -3,5 +3,9 @@
     "Server IP/Hostname": "服务器 IP/主机名",
     "IP or hostname of your Kostal PIKO MP plus": "您的 Kostal PIKO MP plus 的 IP 或主机名",
     "Interval (ms)": "间隔（毫秒）",
-    "Refresh interval in milliseconds": "以毫秒为单位的刷新间隔"
+    "Refresh interval in milliseconds": "以毫秒为单位的刷新间隔",
+    "Number of retries": "重试次数",
+    "Number of retries in case of an error": "发生错误时的重试次数",
+    "Timeout (ms) for Retry": "重试超时（毫秒）",
+    "After how many milliseconds a retry is started, in case of an error.": "多少毫秒后开始重试，以防出错"
 }

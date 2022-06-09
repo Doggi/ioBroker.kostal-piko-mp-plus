@@ -47,6 +47,7 @@ The device information and measured values are provided by the XML interface `ht
 
 ### **WORK IN PROGRESS**
 
+-   (Doggi) Retries in case of error added with setting option
 -   (Doggi) set connection status to false when response code isnt 200
 -   (Doggi) log message "refreshing states" now in debug log
 
