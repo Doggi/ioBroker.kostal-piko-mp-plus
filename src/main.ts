@@ -47,10 +47,10 @@ class KostalPikoMpPlus extends utils.Adapter {
             const states = StatesMapper.states;
             this.generateMdStateTable(states);
 
-            this.log.info(`create http client with baseURL: ${serverBaseUrl}`);
+            this.log.debug(`create http client with baseURL: ${serverBaseUrl}`);
             const client = this.createClient(serverBaseUrl);
 
-            this.log.info(`axios client with base url ${serverBaseUrl} created`);
+            this.log.debug(`axios client with base url ${serverBaseUrl} created`);
             await this.refreshMeasurements(client, states);
         } else {
             this.log.error(`Server IP/Host: ${this.config.serverIp} is invalid - example 192.168.0.1`);
@@ -92,7 +92,7 @@ class KostalPikoMpPlus extends utils.Adapter {
             this.log.error(`set connection state to false and stop refreshing`);
             this.setState("info.connection", false, true);
             if (axios.isAxiosError(error)) {
-                this.log.error(`error message: ${error.message} - ${error.response?.data}`);
+                this.log.error(`error message: ${error.message}${error.response ? " - " + error.response.data : ""}`);
             } else {
                 this.log.error(`unexpected error: ${error}`);
             }
