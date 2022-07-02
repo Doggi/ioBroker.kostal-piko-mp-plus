@@ -126,7 +126,7 @@ class KostalPikoMpPlus extends utils.Adapter {
 
             let value: any;
 
-            if (selectedValue !== undefined) {
+            if (selectedValue !== undefined && (<Attr>selectedValue).value) {
                 value = (<Attr>selectedValue).value;
             }
 
