@@ -123,20 +123,19 @@ class KostalPikoMpPlus extends utils.Adapter {
     private async updateStates(dom: Document, states: State[]): Promise<void> {
         for (const s of states) {
             let selectedValue = xpath.select1(s.xpathValue, dom);
-
             let value: any;
 
-            if (selectedValue !== undefined && (<Attr>selectedValue).value) {
+            if (selectedValue !== undefined) {
                 value = (<Attr>selectedValue).value;
             }
 
             let unit = null;
-            if (s.xpathUnit !== undefined) {
+            if (s.xpathUnit !== undefined && xpath.select1(s.xpathUnit, dom) !== undefined) {
                 selectedValue = xpath.select1(s.xpathUnit, dom);
                 unit = (<Attr>selectedValue).value;
             }
 
-            if (value !== undefined) {
+            if (value !== undefined && unit !== undefined) {
                 this.log.debug(`found state ${s.id} - ${value}`);
                 const common: ioBroker.StateCommon = this.createStateCommonFromState(s, unit);
 
