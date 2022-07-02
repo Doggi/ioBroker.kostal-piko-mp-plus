@@ -126,7 +126,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         selectedValue = import_xpath.default.select1(s.xpathUnit, dom);
         unit = selectedValue.value;
       }
-      if (value !== void 0 && unit !== void 0) {
+      if (value !== void 0) {
         this.log.debug(`found state ${s.id} - ${value}`);
         const common = this.createStateCommonFromState(s, unit);
         await this.setObjectNotExistsAsync(s.id, { type: "state", common, native: {} });
