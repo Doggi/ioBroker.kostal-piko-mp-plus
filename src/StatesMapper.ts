@@ -89,6 +89,13 @@ export class StatesMapper {
             name: "Web Portal",
         },
         {
+            xpathValue: "/root/Device/Yields/Yield[@Type='Produced'][@Slot='Total']/YieldValue/@Value",
+            xpathUnit: "/root/Device/Yields/Yield[@Type='Produced'][@Slot='Total']/@Unit",
+            id: "yields.total",
+            name: "Total Produced",
+            type: "number",
+        },
+        {
             xpathValue: "/root/Device/Measurements/Measurement[@Type='AC_Voltage']/@Value",
             xpathUnit: "/root/Device/Measurements/Measurement[@Type='AC_Voltage']/@Unit",
             id: "measurements.acvoltage",
