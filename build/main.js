@@ -118,7 +118,7 @@ class KostalPikoMpPlus extends utils.Adapter {
     for (const s of states) {
       let selectedValue = import_xpath.default.select1(s.xpathValue, dom);
       let value;
-      if (selectedValue !== void 0) {
+      if (selectedValue !== void 0 && selectedValue.value) {
         value = selectedValue.value;
       }
       let unit = null;
