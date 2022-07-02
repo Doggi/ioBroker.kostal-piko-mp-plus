@@ -47,6 +47,14 @@ The device information and measured values are provided by the XML interface `ht
 
 ### **WORK IN PROGRESS**
 
+-   (dependabot[bot]) Bump @typescript-eslint/eslint-plugin from 5.27.0 to 5.30.0 (#13)
+-   (dependabot[bot]) Bump eslint from 8.15.0 to 8.18.0 (#11)
+-   (dependabot[bot]) Bump @typescript-eslint/parser from 5.22.0 to 5.30.0 (#12)
+-   (dependabot[bot]) Bump prettier from 2.6.2 to 2.7.1 (#8)
+-   (dependabot[bot]) Bump eslint-plugin-prettier from 4.0.0 to 4.2.1 (#10)
+-   (dependabot[bot]) Bump ts-node from 10.8.0 to 10.8.1 (#9)
+-   (dependabot[bot]) Bump @types/sinon from 10.0.11 to 10.0.12 (#7)
+-   (dependabot[bot]) Bump typescript from 4.7.2 to 4.7.4 (#6)
 -   (Doggi) Retries in case of error added with setting option
 -   (Doggi) set connection status to false when response code isnt 200
 -   (Doggi) log message "refreshing states" now in debug log
