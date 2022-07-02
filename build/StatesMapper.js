@@ -124,10 +124,10 @@ StatesMapper.states = [
     type: "number"
   },
   {
-    xpathValue: "/root/Device/Measurements/Measurement[@Type='AC_Voltage']/@Value",
-    xpathUnit: "/root/Device/Measurements/Measurement[@Type='AC_Voltage']/@Unit",
-    id: "measurements.acvoltage",
-    name: "AC_Voltage",
+    xpathValue: "/root/Device/Measurements/Measurement[@Type='AC_Frequency']/@Value",
+    xpathUnit: "/root/Device/Measurements/Measurement[@Type='AC_Frequency']/@Unit",
+    id: "measurements.acfrequency",
+    name: "AC_Frequency",
     type: "number"
   },
   {
@@ -145,6 +145,13 @@ StatesMapper.states = [
     type: "number"
   },
   {
+    xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Voltage']/@Value",
+    xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Voltage']/@Unit",
+    id: "measurements.dcvoltage",
+    name: "DC Voltage",
+    type: "number"
+  },
+  {
     xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Voltage1']/@Value",
     xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Voltage1']/@Unit",
     id: "measurements.dcvoltage1",
@@ -156,6 +163,13 @@ StatesMapper.states = [
     xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Voltage2']/@Unit",
     id: "measurements.dcvoltage2",
     name: "DC Voltage 2",
+    type: "number"
+  },
+  {
+    xpathValue: "/root/Device/Measurements/Measurement[@Type='DC_Current']/@Value",
+    xpathUnit: "/root/Device/Measurements/Measurement[@Type='DC_Current']/@Unit",
+    id: "measurements.dccurrent",
+    name: "DC Current",
     type: "number"
   },
   {
