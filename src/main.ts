@@ -135,7 +135,7 @@ class KostalPikoMpPlus extends utils.Adapter {
                 unit = (<Attr>selectedValue).value;
             }
 
-            if (value !== undefined && unit !== undefined) {
+            if (value !== undefined) {
                 this.log.debug(`found state ${s.id} - ${value}`);
                 const common: ioBroker.StateCommon = this.createStateCommonFromState(s, unit);
 
