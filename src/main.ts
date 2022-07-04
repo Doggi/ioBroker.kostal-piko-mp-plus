@@ -46,7 +46,6 @@ class KostalPikoMpPlus extends utils.Adapter {
 
             // Load states config
             const states = StatesMapper.states;
-            this.generateMdStateTable(states);
 
             this.log.debug(`create http client with baseURL: ${serverBaseUrl}`);
             const client = this.createClient(serverBaseUrl);
@@ -188,18 +187,6 @@ class KostalPikoMpPlus extends utils.Adapter {
             throw new Error(`unknown cast type - ${typeString}`);
         }
         return convertedValue;
-    }
-
-    private generateMdStateTable(states: State[]): void {
-        let table: string;
-        table = `\n|Id|Name|Value Type|xPath Value|xPath Unit|\n`;
-        table = `${table}|---|---|---|---|---|\n`;
-        states.forEach((e) => {
-            table = `${table}|${e.id}|${e.name}|${e.type ? e.type : "string"}|${e.xpathValue}|${
-                e.xpathUnit ? e.xpathUnit : "-"
-            }|\n`;
-        });
-        this.log.debug(`${table}`);
     }
 }
 

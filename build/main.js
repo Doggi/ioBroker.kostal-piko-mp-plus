@@ -56,7 +56,6 @@ class KostalPikoMpPlus extends utils.Adapter {
     if (this.serverIpRegex.test(this.config.serverIp)) {
       const serverBaseUrl = `${this.config.serverProtocol}://${this.config.serverIp}:${this.config.serverPort}`;
       const states = import_StatesMapper.StatesMapper.states;
-      this.generateMdStateTable(states);
       this.log.debug(`create http client with baseURL: ${serverBaseUrl}`);
       const client = this.createClient(serverBaseUrl);
       this.log.debug(`axios client with base url ${serverBaseUrl} created`);
@@ -87,6 +86,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         this.setState("info.connection", true, true);
         const dom = new import_xmldom.DOMParser().parseFromString(data);
         await this.updateStates(dom, states);
+        this.failCounter = 0;
         this.log.debug(`create refresh timer`);
         this.refreshTimeout = this.setTimeout(() => this.refreshMeasurements(client, states), this.config.interval);
       } else {
@@ -167,19 +167,6 @@ class KostalPikoMpPlus extends utils.Adapter {
       throw new Error(`unknown cast type - ${typeString}`);
     }
     return convertedValue;
-  }
-  generateMdStateTable(states) {
-    let table;
-    table = `
-|Id|Name|Value Type|xPath Value|xPath Unit|
-`;
-    table = `${table}|---|---|---|---|---|
-`;
-    states.forEach((e) => {
-      table = `${table}|${e.id}|${e.name}|${e.type ? e.type : "string"}|${e.xpathValue}|${e.xpathUnit ? e.xpathUnit : "-"}|
-`;
-    });
-    this.log.debug(`${table}`);
   }
 }
 if (require.main !== module) {

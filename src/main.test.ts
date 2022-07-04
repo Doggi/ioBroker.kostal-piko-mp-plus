@@ -10,6 +10,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { DOMParser } from "xmldom";
 import xpath from "xpath";
+import { StatesMapper } from "../src/StatesMapper";
 
 describe("module to test => function to test", () => {
     // initializing logic
@@ -34,6 +35,19 @@ describe("StatesMapper => PIKO_3.0-2_MP_plus.xml", () => {
         const value = (<Attr>selectedValue).value;
         expect(value).to.equal("PIKO 3.0-2 MP plus");
     });
+});
+
+describe("generate supported values md table", () => {
+    const states = StatesMapper.states;
+    let table: string;
+    table = `\n|Id|Name|Value Type|xPath Value|xPath Unit|\n`;
+    table = `${table}|---|---|---|---|---|\n`;
+    states.forEach((e) => {
+        table = `${table}|${e.id}|${e.name}|${e.type ? e.type : "string"}|${e.xpathValue}|${
+            e.xpathUnit ? e.xpathUnit : "-"
+        }|\n`;
+    });
+    console.log(`${table}`);
 });
 
 // ... more test suites => describe
