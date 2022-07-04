@@ -81,6 +81,8 @@ class KostalPikoMpPlus extends utils.Adapter {
                 this.setState("info.connection", true, true);
                 const dom = new DOMParser().parseFromString(data);
                 await this.updateStates(dom, states);
+                // reset failcounter
+                this.failCounter = 0;
                 this.log.debug(`create refresh timer`);
                 this.refreshTimeout = this.setTimeout(
                     () => this.refreshMeasurements(client, states),
