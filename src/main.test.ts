@@ -6,7 +6,10 @@
  */
 
 import { expect } from "chai";
-// import { functionToTest } from "./moduleToTest";
+import { readFileSync } from "fs";
+import { join } from "path";
+import { DOMParser } from "xmldom";
+import xpath from "xpath";
 
 describe("module to test => function to test", () => {
     // initializing logic
@@ -20,6 +23,17 @@ describe("module to test => function to test", () => {
         result.should.equal(expected);
     });
     // ... more tests => it
+});
+
+describe("StatesMapper => PIKO_3.0-2_MP_plus.xml", () => {
+    const data = readFileSync(join(__dirname, "../test/test_xml_files/PIKO_3.0-2_MP_plus.xml"), "utf-8");
+    const dom = new DOMParser().parseFromString(data);
+
+    it(`should parse PIKO 3.0-2 MP plus`, () => {
+        const selectedValue = xpath.select1("/root/Device/@Name", dom);
+        const value = (<Attr>selectedValue).value;
+        expect(value).to.equal("PIKO 3.0-2 MP plus");
+    });
 });
 
 // ... more test suites => describe
