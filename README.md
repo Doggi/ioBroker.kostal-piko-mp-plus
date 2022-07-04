@@ -58,6 +58,9 @@ The device information and measured values are provided by the XML interface `ht
 -   (Doggi) Retries in case of error added with setting option
 -   (Doggi) set connection status to false when response code isnt 200
 -   (Doggi) log message "refreshing states" now in debug log
+-   (ekoschmi) adding support for Piko 1.5-1 MP Plus
+-   (ekoschmi) adding Yield State (total produced)
+-   (ekoschmi) resetting fail count on successful connection
 
 ### 0.0.3 (2022-06-08)
 

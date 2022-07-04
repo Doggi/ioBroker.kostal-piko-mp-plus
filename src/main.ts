@@ -81,6 +81,8 @@ class KostalPikoMpPlus extends utils.Adapter {
                 this.setState("info.connection", true, true);
                 const dom = new DOMParser().parseFromString(data);
                 await this.updateStates(dom, states);
+                // reset failcounter
+                this.failCounter = 0;
                 this.log.debug(`create refresh timer`);
                 this.refreshTimeout = this.setTimeout(
                     () => this.refreshMeasurements(client, states),
@@ -123,7 +125,6 @@ class KostalPikoMpPlus extends utils.Adapter {
     private async updateStates(dom: Document, states: State[]): Promise<void> {
         for (const s of states) {
             let selectedValue = xpath.select1(s.xpathValue, dom);
-
             let value: any;
 
             if (selectedValue !== undefined) {
@@ -131,7 +132,7 @@ class KostalPikoMpPlus extends utils.Adapter {
             }
 
             let unit = null;
-            if (s.xpathUnit !== undefined) {
+            if (s.xpathUnit !== undefined && xpath.select1(s.xpathUnit, dom) !== undefined) {
                 selectedValue = xpath.select1(s.xpathUnit, dom);
                 unit = (<Attr>selectedValue).value;
             }

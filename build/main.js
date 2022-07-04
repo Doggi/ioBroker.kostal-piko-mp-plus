@@ -122,7 +122,7 @@ class KostalPikoMpPlus extends utils.Adapter {
         value = selectedValue.value;
       }
       let unit = null;
-      if (s.xpathUnit !== void 0) {
+      if (s.xpathUnit !== void 0 && import_xpath.default.select1(s.xpathUnit, dom) !== void 0) {
         selectedValue = import_xpath.default.select1(s.xpathUnit, dom);
         unit = selectedValue.value;
       }
