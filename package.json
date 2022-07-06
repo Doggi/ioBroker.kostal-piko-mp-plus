@@ -122,5 +122,8 @@
   "bugs": {
     "url": "https://github.com/Doggi/ioBroker.kostal-piko-mp-plus/issues"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "mochaExplorer": {
+    "files": ["src/**/*.test.ts"]
+  }
 }
