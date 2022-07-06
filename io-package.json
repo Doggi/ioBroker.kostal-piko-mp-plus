@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "kostal-piko-mp-plus",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "Retries in case of error added with setting option\nset connection status to false when response code isnt 200\nlog message \"refreshing states\" now in debug log\nadding support for Piko 1.5-1 MP Plus\nadding Yield State (total produced)\nresetting fail count on successful connection",
+                "de": "Retries im Falle von Fehlern mit Einstellung Option hinzugefügt\nsetzen sie den verbindungsstatus zu false, wenn antwortcode istnt 200\nlog message \"refreshing states\" jetzt im debug log\nunterstützung für Piko 1.5-1 MP Plus\nhinzufügen von Yield State (gesamt produziert)\nzurücksetzen scheitern an erfolgreicher verbindung",
+                "ru": "В случае ошибки, добавленной с возможностью установки\nустановить статус подключения к false, когда код ответа отклонен 200\nжурнал сообщение \"обновление состояния\" теперь в debug log\nдобавить поддержку Piko 1.5-1 MP Plus\nдобавление Yield State (общее произведенное)\nсброс неудачи рассчитывать на успешное соединение",
+                "pt": "Recupera em caso de erro adicionado com opção de configuração\ndefinir o status de conexão para false quando o código de resposta é instável 200\nlog message \"refreshing states\" now in debug log\nadicionando suporte para Piko 1.5-1 MP Plus\nadicionando Estado de rendimento (total produzido)\nreiniciar a contagem de falhas na conexão bem sucedida",
+                "nl": "Retour in geval van fout toegevoegd met optie\nverbindingsstatus naar vals wanneer reactiecode niet 200 is\ninlogbericht \"verfrissende staten nu in debug log\nvoeg steun voor Piko 1,5-1 MP Plus\nvertaling:\nhet reseteren van falen op succesvolle connectie",
+                "fr": "Réinitialisations en cas d'erreur ajoutée avec option de réglage\ndéfinir le statut de connexion à false lorsque le code de réponse est 200\njournal \"refreshing states\" now in debug log\najouter du support pour Piko 1.5-1 MP Plus\najout de l'État de rendement (produit total)\nréinitialisation compte sur la connexion réussie",
+                "it": "Ripristina in caso di errore aggiunto con opzione di impostazione\nimpostare lo stato di connessione al falso quando il codice di risposta ènt 200\nlog messaggio \"refreshing stati\" ora in debug log\naggiungere supporto per Piko 1.5-1 MP Plus\naggiunta Stato di Rendimento (totale prodotto)\nripristino del conteggio del guasto sulla connessione di successo",
+                "es": "Registros en caso de error añadido con opción de configuración\nestablecer el estado de conexión a falso cuando el código de respuesta isnt 200\nmensaje de registro \"refreshing states\" ahora en debug log\nañadir soporte para Piko 1.5-1 MP Plus\nestado de Yield (total producido)\nreiniciar cuenta con conexión exitosa",
+                "pl": "W przypadku błędu dodaje się opcjami ustawienia opcji\npodstawą statusu połączenia jest fakt, że kod odpowiedzi wynosi 200.00\nwiadomość logiczna „refreshing states” obecnie w debug loglogu\npiko 1.5-1 MP Plus\ndodał do niej państwo (dotal wyprodukowanych)\nreset",
+                "zh-cn": "在出现错误时加上选择\n当反应守则200\n现正处于黑暗的逻辑中“煽动国”的逻辑信息\n增加Piko1.5-1MP Plus的支助\n增加Yield国(生产国)\n重新确定工作不成功"
+            },
             "0.0.3": {
                 "en": "switch interval to timeout\ndeleting from states without values are removed",
                 "de": "schaltintervall zum timeout\nlöschen aus zuständen ohne werte entfernt",

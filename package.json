@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kostal-piko-mp-plus",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Integrate your Kostal PIKO MP plus into ioBroker",
   "author": {
     "name": "Doggi",
@@ -95,7 +95,7 @@
     "coverage": "nyc npm run test:ts",
     "lint": "eslint --ext .ts,.tsx src/",
     "translate": "translate-adapter",
-    "release": "release-script patch --yes",
+    "release": "release-script patch --yes --all",
     "release-minor": "release-script minor --yes",
     "release-major": "release-script major --yes"
   },
