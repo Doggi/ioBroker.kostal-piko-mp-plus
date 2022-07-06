@@ -45,6 +45,8 @@ The device information and measured values are provided by the XML interface `ht
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
 ### 0.0.4 (2022-07-06)
 
 -   (Doggi) Retries in case of error added with setting option
