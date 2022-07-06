@@ -95,7 +95,7 @@
     "coverage": "nyc npm run test:ts",
     "lint": "eslint --ext .ts,.tsx src/",
     "translate": "translate-adapter",
-    "release": "release-script patch --yes --all",
+    "release": "release-script patch --yes",
     "release-minor": "release-script minor --yes",
     "release-major": "release-script major --yes"
   },
