@@ -24,7 +24,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.7",
+    "@iobroker/adapter-core": "^2.6.8",
     "axios": "^0.27.2",
     "xmldom": "^0.6.0",
     "xpath": "^0.0.32"
